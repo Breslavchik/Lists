@@ -26,9 +26,9 @@ namespace ArrayList
         public ArrayList(int[] array)
         {
             _array = new int[10];
-            Length = 0;
+            Length = array.Length;
             MakeLongerArray(array.Length);
-            for (int i = 0; i < Length; i++)
+            for (int i = 0; i < array.Length; i++)
             {
                 _array[i] = array[i];
             }
@@ -71,9 +71,10 @@ namespace ArrayList
             _array = newArray;
         }
         public int GetLength()
-        {            
+        {
             return Length;
         }
+
         public int[] ToArray()
         {
             int[] newArray = new int[Length];
@@ -83,6 +84,18 @@ namespace ArrayList
             }
             return newArray;
         }
+        
+        public void PrintArray()
+        {            
+            for (int i = 0; i < Length; i++)
+            {
+                Console.Write($"{_array[i]},"); 
+            }
+        }
+        /*public override string ToString()
+        {
+            return string.Join(";", this.ToArray());
+        }*/
         public void AddFirst(int val)
         {
 
@@ -95,28 +108,24 @@ namespace ArrayList
             {
                 _array[i] = _array[i - 1];
             }
-            _array[0] = val;
-           // return _array;
+            _array[0] = val;         
         }
 
         public void AddLast(int val)
         {
-            if (Length == _array.Length)
-            {
-                MakeLongerArray(1);
-            }
-            _array[Length] = val;
-            Length++;           
+            Length++;
+            _array[Length-1] = val;           
         }
-              
+        //добавление в начало списка
         public void AddFirst(ArrayList list)
         {
+            Length = Length + list.Length;
             if (Length == _array.Length)
             {
                 MakeLongerArray(list.Length);
             }
-            Length = Length + list.Length;
-            for (int i = 0; i < Length; i++)
+
+            for (int i = 0; i < list.Length; i++)
             {
                 _array[i + list.Length] = _array[i];
             }
@@ -124,60 +133,65 @@ namespace ArrayList
             {
                 _array[i] = list._array[i];
             }
-            //return _array;
         }
+        
         public void AddLast(ArrayList list)
         {
+            Length = Length + list.Length;
             if (Length == _array.Length)
             {
-                MakeLongerArray(list.Length);
+                MakeLongerArray(Length);
             }
-            Length = Length + list.Length;
-            for (int i = list.Length-1; i < Length; i++)
+            for (int i = Length-list.Length; i <Length; i++)
             {
-                _array[i + list.Length] = list._array[i];
-            }           
+                _array[i] = list._array[i-(Length-list.Length)];
+            }
         }
 
+        //AddAt(int idx, int val) - вставка по указанному индексу
         public void AddAt(int idx, int val)
         {
+            Length++;
             if (Length == _array.Length)
             {
                 MakeLongerArray(1);
             }
-            Length++;
-            if (idx > Length)
+            
+            if (idx >= Length)
             {
                 throw new IndexOutOfRangeException();
             }
-            for (int i = idx; i<Length; i++)
+            for (int i = Length - 1; i > idx; i--)
             {
-                _array[i+1] = _array[i];
+                _array[i] = _array[i - 1];
             }
-            _array[idx] = val;
-            //return _array;
-        }
-        public void Set(int idx, int val)
-        {
             _array[idx] = val;
         }
         
-        public void RemoveFirst()
+        public void AddAt(int idx, ArrayList list)
         {
-            for (int i=Length; i>0; i--)
+            Length = Length + list.Length;
+            if (Length == _array.Length)
             {
-                _array[i + 1] = _array[i];
+                MakeLongerArray(Length);
             }
-
+            for (int i = idx; i < Length-list.Length; i++)
+            {
+                _array[i + list.Length] = _array[i];
+            }
+            for (int i = idx; i < idx+list.Length; i++)
+            {
+                _array[i] = list._array[i - idx];
+            }
         }
-        public void RemoveLast()
+        //Set(int idx, int val) - поменять значение элемента с указанным индексом
+        public void Set(int idx, int val)
         {
-            Length--;
-            if (Length <= (_array.Length / 2))
+            if (idx>=Length)
             {
-                MakeShorterArray(1);
+                throw new IndexOutOfRangeException();
             }
+            _array[idx] = val;
         }
-
     }
 }
