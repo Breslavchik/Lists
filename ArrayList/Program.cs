@@ -34,10 +34,16 @@ namespace ArrayList
             //temp.AddFirst(temp2);
             
             ArrayList temp2 = new ArrayList(new int[] { -10, 20, 50, 30, -8 });
-            ArrayList temp = new ArrayList(new int[] { 1, 2, 3, 9 });
+            ArrayList temp = new ArrayList(new int[] { 9, 1, 2, 3, 8, 9, 1 });
+            ArrayList temp3 = new ArrayList(new int[] { 3, 3, 3});
             //act
-            temp.AddAt(2, temp2);
-            temp.PrintArray();
+            // Console.WriteLine($"{temp.Sort()}"  );
+            temp3.PrintArray();
+            Console.WriteLine();
+            Console.WriteLine(temp3.GetLength());
+            
+            Console.WriteLine($"{temp3.RemoveAll(3)}");
+            temp3.PrintArray();
 
         }
     }
