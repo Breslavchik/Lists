@@ -27,22 +27,33 @@ namespace Lists
                 _head = null;
                 _tail = null;
             }
-            _head = new Node(array[0]);
-            _tail = _head;
-            for (int i=1;i<array.Length;i++)
+            else
             {
-                _tail.Next = new Node(array[i]);
-                _tail = _tail.Next;
+                _head = new Node(array[0]);
+                _tail = _head;
+                for (int i = 1; i < array.Length; i++)
+                {
+                    _tail.Next = new Node(array[i]);
+                    _tail = _tail.Next;
+                }
             }
         }
         public int GetLength()
-        {            
-            Node current = _head;
-            int length = 1;
-            while (current.Next != null)
+        {
+            int length = 0;
+            if (_head == null && _tail == null)
             {
-                current = current.Next;
-                length++;
+                return length;
+            }
+            else
+            {
+                Node current = _head;
+                length = 1;
+                while (current.Next != null)
+                {
+                    current = current.Next;
+                    length++;
+                }
             }
             return length;
 
@@ -84,15 +95,30 @@ namespace Lists
         public void PrintArray(LinkedList list)
         {
             int [] array =list.ToArray();
-            for (int i = 1; i < array.Length; i++)
+            for (int i = 0; i < array.Length; i++)
             {
                 Console.Write($"{array[i]} ");
             }
         }
+        //AddFirst(int val) - добавление в начало списка
+       public void AddFirst(int val)
+        {
+            _head.Next = _head;
+            _head = new Node(val);
+            _head.Next = _head.Next;
+        }
         public void AddLast(int val)
         {
-            _tail.Next = new Node(val);
-            _tail = _tail.Next;
+            if (_head == null && _tail == null)
+            {
+                _head = new Node(val);
+                _tail = _head;
+            }
+            else
+            {
+                _tail.Next = new Node(val);
+                _tail = _tail.Next;
+            }
         }
     }
 }

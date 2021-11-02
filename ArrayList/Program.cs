@@ -44,10 +44,12 @@ namespace Lists
 
             //Console.WriteLine($"{temp3.RemoveAll(3)}");
             //temp3.PrintArray();
-            LinkedList list = new LinkedList(new int[] { 1, 4, 6, 7, 8 });
-            Console.WriteLine(list.GetLength());
-            list.AddLast(19);
+            LinkedList list = new LinkedList(new int[] {1,2,4});
+            //Console.WriteLine(list.GetLength());
+            //list.AddLast(19);
+            list.AddFirst(78);
             list.PrintArray(list);
+            //ArrayList arlist = new ArrayList(new int[] { 1, 6, 8, 9, 11 });
 
         }
     }
