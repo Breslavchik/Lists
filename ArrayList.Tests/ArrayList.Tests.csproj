@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ArrayList\ArrayList.csproj" />
+    <ProjectReference Include="..\ArrayList\Lists.csproj" />
   </ItemGroup>
 
 </Project>
