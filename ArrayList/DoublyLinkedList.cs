@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 
 namespace Lists
 {
-    public class LinkedList
+    public class DoublyLinkedList
     {
-        private Node _head;
-        private Node _tail;
-        public LinkedList()
+        private DoublyLinkedNode _head;
+        private DoublyLinkedNode _tail;
+        public DoublyLinkedList()
         {
             _head = null;
             _tail = null;
         }
-        public LinkedList(int value)
+        public DoublyLinkedList(int value)
         {
-            _head = new Node(value);
+            _head = new DoublyLinkedNode(value);
             _tail = _head;
         }
-        public LinkedList(int[] array)
+        public DoublyLinkedList(int[] array)
         {
             if (array.Length == 0)
             {
@@ -29,11 +29,11 @@ namespace Lists
             }
             else
             {
-                _head = new Node(array[0]);
+                _head = new DoublyLinkedNode(array[0]);
                 _tail = _head;
                 for (int i = 1; i < array.Length; i++)
                 {
-                    _tail.Next = new Node(array[i]);
+                    _tail.Next = new DoublyLinkedNode(array[i]);
                     _tail = _tail.Next;
                 }
             }
@@ -47,7 +47,7 @@ namespace Lists
             }
             else
             {
-                Node current = _head;
+                DoublyLinkedNode current = _head;
                 length = 1;
                 while (current.Next != null)
                 {
@@ -56,9 +56,7 @@ namespace Lists
                 }
             }
             return length;
-
         }
-
         public int[] ToArray()
         {
             int length = GetLength();
@@ -68,7 +66,7 @@ namespace Lists
                 return array;
             }
             array[0] = _head.Value;
-            Node current = _head;
+            DoublyLinkedNode current = _head;
             for (int i = 1; i < array.Length; i++)
             {
                 current = current.Next;
@@ -76,7 +74,7 @@ namespace Lists
             }
             return array;
         }
-        public void PrintArray(LinkedList list)
+        public void PrintArray(DoublyLinkedList list)
         {
             int[] array = list.ToArray();
             for (int i = 0; i < array.Length; i++)
@@ -89,15 +87,15 @@ namespace Lists
         {
             if (_head == null && _tail == null)
             {
-                _head = new Node(val);
+                _head = new DoublyLinkedNode(val);
                 _tail = _head;
                 return;
             }
-            Node tmp = new Node(val);
+            DoublyLinkedNode tmp = new DoublyLinkedNode(val);
             tmp.Next = _head;
             _head = tmp;
         }
-        public void AddFirst(LinkedList list)
+        public void AddFirst(DoublyLinkedList list)
         {
             list._tail.Next = _head;
             _head = list._head;
@@ -106,20 +104,19 @@ namespace Lists
         {
             if (_head == null && _tail == null)
             {
-                _head = new Node(val);
+                _head = new DoublyLinkedNode(val);
                 _tail = _head;
             }
             else
             {
-                _tail.Next = new Node(val);
+                _tail.Next = new DoublyLinkedNode(val);
                 _tail = _tail.Next;
             }
         }
-        public void AddLast(LinkedList list)
+        public void AddLast(DoublyLinkedList list)
         {
             _tail.Next = list._head;
         }
-
         //AddAt(int idx, int val) - вставка по указанному индексу
         public void AddAt(int idx, int val)
         {
@@ -128,31 +125,27 @@ namespace Lists
             {
                 throw new IndexOutOfRangeException("Такого индекса нет");
             }
-            Node current = _head;
+            DoublyLinkedNode current = _head;
             if (idx == 0)
             {
-                AddFirst(val);
+                current = _head;
             }
             for (int i = 1; i < idx; i++)
             {
                 current = current.Next;
             }
-            Node tmp = new Node(val);
+            DoublyLinkedNode tmp = new DoublyLinkedNode(val);
             tmp.Next = current.Next;
             current.Next = tmp;
         }
-        public void AddAt(int idx, LinkedList list)
+        public void AddAt(int idx, DoublyLinkedList list)
         {
             int length = GetLength();
             if (idx > length)
             {
                 throw new IndexOutOfRangeException("Такого индекса нет");
             }
-            if (idx == 0)
-            {
-                AddFirst(list);
-            }
-            Node current = _head;
+            DoublyLinkedNode current = _head;
 
             for (int i = 1; i < idx; i++)
             {
@@ -169,7 +162,7 @@ namespace Lists
             {
                 throw new IndexOutOfRangeException("Такого индекса нет");
             }
-            Node current = _head;
+            DoublyLinkedNode current = _head;
 
             for (int i = 1; i <= idx; i++)
             {
@@ -179,43 +172,23 @@ namespace Lists
         }
         public void RemoveFirst()
         {
-            if (_head == null)
-            {
-                throw new IndexOutOfRangeException("Такого индекса нет");
-            }
-            if (_head.Next == null)
-            {
-                _head = null;
-                _tail = null;
-                return;
-            }
             _head = _head.Next;
         }
         public void RemoveLast()
         {
-            if (_head == null)
-            {
-                throw new IndexOutOfRangeException();
-            }
-            if (_head.Next == null)
-            {
-                _head = null;
-                _tail = null;
-                return;
-            }
-            Node current = _head;
-            while (current.Next.Next!= null)
+            DoublyLinkedNode current = _head;
+            while (current.Next.Next != null)
             {
                 current = current.Next;
-            }      
+            }
+            _tail.Value = current.Value;
+            current.Next = _tail.Next;
             _tail = current;
-            current.Next = null;
         }
-        //RemoveAt(int idx) - удаление по индексу
         public void RemoveAt(int idx)
         {
             int length = GetLength();
-            if (idx >= length)
+            if (idx > length)
             {
                 throw new IndexOutOfRangeException("Попробуйте другое число");
             }
@@ -224,12 +197,7 @@ namespace Lists
                 RemoveFirst();
                 return;
             }
-            if (idx == length-1)
-            {
-                RemoveLast();
-                return;
-            }
-            Node current = _head;
+            DoublyLinkedNode current = _head;
 
             for (int i = 1; i < idx; i++)
             {
@@ -242,9 +210,9 @@ namespace Lists
         {
 
             int length = GetLength();
-            if (n > length|| _head == null)
+            if (n > length)
             {
-                throw new Exception();
+                throw new Exception("Попробуйте другое число");
             }
             if (n == length)
             {
@@ -252,7 +220,7 @@ namespace Lists
                 _tail = null;
                 return;
             }
-            Node current = _head;
+            DoublyLinkedNode current = _head;
 
             for (int i = 1; i < n; i++)
             {
@@ -264,9 +232,9 @@ namespace Lists
         public void RemoveLastMultiple(int n)
         {
             int length = GetLength();
-            if (n > length || _head == null)
+            if (n > length)
             {
-                throw new Exception();
+                throw new Exception("Попробуйте другое число");
             }
             if (n == length)
             {
@@ -274,7 +242,7 @@ namespace Lists
                 _tail = null;
                 return;
             }
-            Node current = _head;
+            DoublyLinkedNode current = _head;
             for (int i = 1; i < length - n; i++)
             {
                 current = current.Next;
@@ -287,9 +255,9 @@ namespace Lists
         public void RemoveAtMultiple(int idx, int n)
         {
             int length = GetLength();
-            if (idx + n > length || _head == null)
+            if (idx + n > length)
             {
-                throw new Exception();
+                throw new Exception("Попробуйте другое число");
             }
             if (length - n == idx)
             {
@@ -301,7 +269,7 @@ namespace Lists
                 RemoveFirstMultiple(n);
                 return;
             }
-            Node current = _head;
+            DoublyLinkedNode current = _head;
             for (int i = 1; i < idx; i++)
             {
                 current = current.Next;
@@ -315,12 +283,8 @@ namespace Lists
         // RemoveFirst(int val) - удалить первый попавшийся элемент, значение которого равно val(вернуть индекс удалённого элемента)
         public int RemoveFirst(int val)
         {
-            if ( _head == null)
-            {
-                throw new Exception();
-            }           
             int index = -1;
-            Node current = _head;
+            DoublyLinkedNode current = _head;
             if (_head.Value == val)
             {
                 RemoveFirst();
@@ -349,47 +313,40 @@ namespace Lists
                 return index;
             }
         }
-        //RemoveAll(int val) - удалить все элементы, равные val(вернуть кол-во удалённых элементов)      
+        //RemoveAll(int val) - удалить все элементы, равные val(вернуть кол-во удалённых элементов)
+        //переделать
         public int RemoveAll(int val)
         {
-            if (_head == null)
-            {
-                throw new Exception();
-            }
             int sum = 0;
-            Node current = _head;
-            Node tmp = new Node(0);
-            tmp.Next = current;
+            DoublyLinkedNode current = _head;
 
-            while (current != null)
+            while (current.Next != null)
             {
-                if (current.Value == val)
+                if (_head.Value == val)
                 {
-                    if (current == _head)
-                    {
-                        RemoveFirst();
-                        sum += 1;
-                    }
-                    else if (current == _tail)
-                    {
-                        RemoveLast();
-                        sum += 1;
-                    }
-                    else
-                    {
-                        tmp.Next = current.Next;
-                        sum += 1;
-                    }                    
+                    RemoveFirst();
+                    sum += 1;
                 }
-                tmp = current;
+                if (current.Next.Value == val)
+                {
+                    current.Next = current.Next.Next;
+                    sum += 1;
+                }
                 current = current.Next;
+            }
+            if (val == _tail.Value)
+            {
+                _tail.Value = current.Value;
+                current.Next = _tail.Next;
+                _tail = current;
+                sum += 1;
             }
             return sum;
         }
         //Contains(int val) - проверка, есть ли элемент в списке
         public bool Contains(int val)
         {
-            Node current = _head;
+            DoublyLinkedNode current = _head;
             if (_head.Value == val)
             {
                 return true;
@@ -413,11 +370,7 @@ namespace Lists
         public int IndexOf(int val)
         {
             int index = -1;
-            if (_head == null)
-            {
-                return index;
-            }
-            Node current = _head;
+            DoublyLinkedNode current = _head;
             if (_head.Value == val)
             {
                 return index = 0;
@@ -449,12 +402,8 @@ namespace Lists
         //Get(int idx) - вернёт значение элемента списка c указанным индексом
         public int Get(int idx)
         {
-            if (_head == null)
-            {
-                throw new IndexOutOfRangeException();
-            }
             int length = GetLength();
-            if (idx >= length)
+            if (idx > length)
             {
                 throw new IndexOutOfRangeException("Попробуйте другое число");
             }
@@ -462,7 +411,7 @@ namespace Lists
             {
                 return _head.Value;
             }
-            Node current = _head;
+            DoublyLinkedNode current = _head;
 
             for (int i = 1; i <= idx; i++)
             {
@@ -473,11 +422,11 @@ namespace Lists
         //Reverse() - изменение порядка элементов списка на обратный
         public void Reverse()
         {
-            Node current = _head;
+            DoublyLinkedNode current = _head;
             while (current.Next != null)
             {
 
-                Node tmp = current.Next;
+                DoublyLinkedNode tmp = current.Next;
                 current.Next = tmp.Next;
                 tmp.Next = _head;
                 _head = tmp;
@@ -487,15 +436,7 @@ namespace Lists
         //Max() - поиск значения максимального элемента
         public int Max()
         {
-            if (_head == null)
-            {
-                throw new IndexOutOfRangeException();
-            }
-            if (_head.Next == null)
-            {               
-                return _head.Value;
-            }
-            Node current = _head;
+            DoublyLinkedNode current = _head;
             int max = _head.Value;
             while (current.Next != null)
             {
@@ -509,15 +450,7 @@ namespace Lists
         }
         public int Min()
         {
-            if (_head == null)
-            {
-                throw new IndexOutOfRangeException();
-            }
-            if (_head.Next == null)
-            {
-                return _head.Value;
-            }
-            Node current = _head;
+            DoublyLinkedNode current = _head;
             int min = _head.Value;
             while (current.Next != null)
             {
@@ -531,15 +464,7 @@ namespace Lists
         }
         public int IndexOfMax()
         {
-            if (_head == null)
-            {
-                throw new IndexOutOfRangeException();
-            }
-            if (_head.Next == null)
-            {
-                return 0; 
-            }
-            Node current = _head;
+            DoublyLinkedNode current = _head;
             int max = _head.Value;
             int index = 0;
             int tmp = 0;
@@ -557,15 +482,7 @@ namespace Lists
         }
         public int IndexOfMin()
         {
-            if (_head == null)
-            {
-                throw new IndexOutOfRangeException();
-            }
-            if (_head.Next == null)
-            {
-                return 0;
-            }
-            Node current = _head;
+            DoublyLinkedNode current = _head;
             int min = _head.Value;
             int index = 0;
             int tmp = 0;
@@ -601,7 +518,7 @@ namespace Lists
                     j--;
                 }
             }
-            Node current = _head;
+            DoublyLinkedNode current = _head;
             _head.Value = array[0];
             for (int i = 1; i < array.Length; i++)
             {
@@ -610,6 +527,8 @@ namespace Lists
             }
             _tail = current;
         }
+
+
         public void SortDesc()
         {
             int[] array = ToArray();
@@ -625,7 +544,7 @@ namespace Lists
                 }
             }
 
-            Node current = _head;
+            DoublyLinkedNode current = _head;
             _head.Value = array[0];
             for (int i = 1; i < array.Length; i++)
             {
@@ -636,3 +555,4 @@ namespace Lists
         }
     }
 }
+

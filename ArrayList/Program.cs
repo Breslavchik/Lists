@@ -44,11 +44,28 @@ namespace Lists
 
             //Console.WriteLine($"{temp3.RemoveAll(3)}");
             //temp3.PrintArray();
-            LinkedList list = new LinkedList(new int[] {1,2,4});
+            LinkedList list = new LinkedList(new int[] { 9, 1, 2, 3, 8, 9 });
+            LinkedList list2 = new LinkedList(new int[] {  });
             //Console.WriteLine(list.GetLength());
-            //list.AddLast(19);
-            list.AddFirst(78);
-            list.PrintArray(list);
+
+            //list.RemoveAt(0);
+
+            //list.AddFirst(7);
+
+            // list.RemoveFirst(5);
+            //list.PrintArray(list);
+            Console.WriteLine();
+            //Console.WriteLine($"{list.IndexOfMin()}");
+            //int[] array=list.Sort();
+            //for (int i = 0; i < array.Length; i++)
+            //{
+            //    Console.WriteLine(array[i]);
+            //}
+            //list.AddLast(77);
+            list2.RemoveFirst();
+            //list2.RemoveAll(3);
+            //list2.AddLast(77);
+            list2.PrintArray(list2);
             //ArrayList arlist = new ArrayList(new int[] { 1, 6, 8, 9, 11 });
 
         }
