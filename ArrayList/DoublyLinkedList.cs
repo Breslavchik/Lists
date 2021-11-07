@@ -121,7 +121,7 @@ namespace Lists
         public void AddAt(int idx, int val)
         {
             int length = GetLength();
-            if (idx > length)
+            if (idx >= length)
             {
                 throw new IndexOutOfRangeException("Такого индекса нет");
             }
@@ -158,7 +158,7 @@ namespace Lists
         public void Set(int idx, int val)
         {
             int length = GetLength();
-            if (idx > length)
+            if (idx >= length)
             {
                 throw new IndexOutOfRangeException("Такого индекса нет");
             }
@@ -172,23 +172,42 @@ namespace Lists
         }
         public void RemoveFirst()
         {
+            if (_head == null)
+            {
+                throw new IndexOutOfRangeException("Такого индекса нет");
+            }
+            if (_head.Next == null)
+            {
+                _head = null;
+                _tail = null;
+                return;
+            }
             _head = _head.Next;
         }
         public void RemoveLast()
         {
+            if (_head == null)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            if (_head.Next == null)
+            {
+                _head = null;
+                _tail = null;
+                return;
+            }
             DoublyLinkedNode current = _head;
             while (current.Next.Next != null)
             {
                 current = current.Next;
             }
-            _tail.Value = current.Value;
-            current.Next = _tail.Next;
             _tail = current;
+            current.Next = null;
         }
         public void RemoveAt(int idx)
         {
             int length = GetLength();
-            if (idx > length)
+            if (idx >= length)
             {
                 throw new IndexOutOfRangeException("Попробуйте другое число");
             }
@@ -197,6 +216,7 @@ namespace Lists
                 RemoveFirst();
                 return;
             }
+           
             DoublyLinkedNode current = _head;
 
             for (int i = 1; i < idx; i++)
@@ -208,11 +228,10 @@ namespace Lists
         //RemoveFirstMultiple(int n) - удаление первых n элементов
         public void RemoveFirstMultiple(int n)
         {
-
             int length = GetLength();
-            if (n > length)
+            if (n > length || _head == null)
             {
-                throw new Exception("Попробуйте другое число");
+                throw new Exception();
             }
             if (n == length)
             {
@@ -232,9 +251,10 @@ namespace Lists
         public void RemoveLastMultiple(int n)
         {
             int length = GetLength();
-            if (n > length)
+            int length = GetLength();
+            if (n > length || _head == null)
             {
-                throw new Exception("Попробуйте другое число");
+                throw new Exception();
             }
             if (n == length)
             {
@@ -247,17 +267,16 @@ namespace Lists
             {
                 current = current.Next;
             }
-            _tail.Value = current.Value;
-            current.Next = _tail.Next;
             _tail = current;
+            current.Next = null;
         }
         //RemoveAtMultiple(int idx, int n) - удаление n элементов, начиная с указанного индекса
         public void RemoveAtMultiple(int idx, int n)
         {
             int length = GetLength();
-            if (idx + n > length)
+            if (idx + n > length || _head == null)
             {
-                throw new Exception("Попробуйте другое число");
+                throw new Exception();
             }
             if (length - n == idx)
             {
@@ -283,6 +302,10 @@ namespace Lists
         // RemoveFirst(int val) - удалить первый попавшийся элемент, значение которого равно val(вернуть индекс удалённого элемента)
         public int RemoveFirst(int val)
         {
+            if (_head == null)
+            {
+                throw new Exception();
+            }
             int index = -1;
             DoublyLinkedNode current = _head;
             if (_head.Value == val)
@@ -317,29 +340,37 @@ namespace Lists
         //переделать
         public int RemoveAll(int val)
         {
+            if (_head == null)
+            {
+                throw new Exception();
+            }
             int sum = 0;
             DoublyLinkedNode current = _head;
+            DoublyLinkedNode tmp = new Node(0);
+            tmp.Next = current;
 
-            while (current.Next != null)
+            while (current != null)
             {
-                if (_head.Value == val)
+                if (current.Value == val)
                 {
-                    RemoveFirst();
-                    sum += 1;
+                    if (current == _head)
+                    {
+                        RemoveFirst();
+                        sum += 1;
+                    }
+                    else if (current == _tail)
+                    {
+                        RemoveLast();
+                        sum += 1;
+                    }
+                    else
+                    {
+                        tmp.Next = current.Next;
+                        sum += 1;
+                    }
                 }
-                if (current.Next.Value == val)
-                {
-                    current.Next = current.Next.Next;
-                    sum += 1;
-                }
+                tmp = current;
                 current = current.Next;
-            }
-            if (val == _tail.Value)
-            {
-                _tail.Value = current.Value;
-                current.Next = _tail.Next;
-                _tail = current;
-                sum += 1;
             }
             return sum;
         }
@@ -370,11 +401,17 @@ namespace Lists
         public int IndexOf(int val)
         {
             int index = -1;
-            DoublyLinkedNode current = _head;
+          
+            if (_head == null)
+            {
+                return index;
+            }
             if (_head.Value == val)
             {
                 return index = 0;
             }
+            DoublyLinkedNode current = _head;
+
             else
             {
                 int tmp = 0;
@@ -402,8 +439,12 @@ namespace Lists
         //Get(int idx) - вернёт значение элемента списка c указанным индексом
         public int Get(int idx)
         {
+            if (_head == null)
+            {
+                throw new IndexOutOfRangeException();
+            }
             int length = GetLength();
-            if (idx > length)
+            if (idx >= length)
             {
                 throw new IndexOutOfRangeException("Попробуйте другое число");
             }
@@ -436,6 +477,14 @@ namespace Lists
         //Max() - поиск значения максимального элемента
         public int Max()
         {
+            if (_head == null)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            if (_head.Next == null)
+            {
+                return _head.Value;
+            }
             DoublyLinkedNode current = _head;
             int max = _head.Value;
             while (current.Next != null)
@@ -450,6 +499,14 @@ namespace Lists
         }
         public int Min()
         {
+            if (_head == null)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            if (_head.Next == null)
+            {
+                return _head.Value;
+            }
             DoublyLinkedNode current = _head;
             int min = _head.Value;
             while (current.Next != null)
@@ -464,6 +521,14 @@ namespace Lists
         }
         public int IndexOfMax()
         {
+            if (_head == null)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            if (_head.Next == null)
+            {
+                return 0;
+            }
             DoublyLinkedNode current = _head;
             int max = _head.Value;
             int index = 0;
@@ -482,6 +547,14 @@ namespace Lists
         }
         public int IndexOfMin()
         {
+            if (_head == null)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            if (_head.Next == null)
+            {
+                return 0;
+            }
             DoublyLinkedNode current = _head;
             int min = _head.Value;
             int index = 0;

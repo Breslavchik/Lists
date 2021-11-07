@@ -124,7 +124,7 @@ namespace Lists
         public void AddAt(int idx, int val)
         {
             int length = GetLength();
-            if (idx > length)
+            if (idx >= length)
             {
                 throw new IndexOutOfRangeException("Такого индекса нет");
             }
@@ -279,9 +279,8 @@ namespace Lists
             {
                 current = current.Next;
             }
-            _tail.Value = current.Value;
-            current.Next = _tail.Next;
             _tail = current;
+            current.Next = null;
         }
         //RemoveAtMultiple(int idx, int n) - удаление n элементов, начиная с указанного индекса
         public void RemoveAtMultiple(int idx, int n)
