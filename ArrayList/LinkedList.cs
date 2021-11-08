@@ -118,6 +118,7 @@ namespace Lists
         public void AddLast(LinkedList list)
         {
             _tail.Next = list._head;
+            _tail = list._tail;
         }
 
         //AddAt(int idx, int val) - вставка по указанному индексу

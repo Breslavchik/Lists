@@ -93,11 +93,13 @@ namespace Lists
             }
             DoublyLinkedNode tmp = new DoublyLinkedNode(val);
             tmp.Next = _head;
+            _head.Previus = tmp;
             _head = tmp;
         }
         public void AddFirst(DoublyLinkedList list)
         {
             list._tail.Next = _head;
+            _head.Previus = list._tail;
             _head = list._head;
         }
         public void AddLast(int val)
@@ -110,12 +112,15 @@ namespace Lists
             else
             {
                 _tail.Next = new DoublyLinkedNode(val);
+                _tail.Previus = _tail;
                 _tail = _tail.Next;
             }
         }
         public void AddLast(DoublyLinkedList list)
         {
             _tail.Next = list._head;
+            list._head.Previus = _tail;
+            _tail = list._tail;
         }
         //AddAt(int idx, int val) - вставка по указанному индексу
         public void AddAt(int idx, int val)
@@ -136,7 +141,9 @@ namespace Lists
             }
             DoublyLinkedNode tmp = new DoublyLinkedNode(val);
             tmp.Next = current.Next;
+            tmp.Previus = current;
             current.Next = tmp;
+            current.Next.Previus = tmp;
         }
         public void AddAt(int idx, DoublyLinkedList list)
         {
@@ -152,7 +159,9 @@ namespace Lists
                 current = current.Next;
             }
             list._tail.Next = current.Next;
-            current.Next = list._head;
+            current.Next.Previus = list._tail;
+           current.Next = list._head;
+            list._head.Previus = current;
         }
         //Set(int idx, int val) - поменять значение элемента с указанным индексом
         public void Set(int idx, int val)
@@ -216,7 +225,11 @@ namespace Lists
                 RemoveFirst();
                 return;
             }
-           
+            if (idx == length - 1)
+            {
+                RemoveLast();
+                return;
+            }
             DoublyLinkedNode current = _head;
 
             for (int i = 1; i < idx; i++)
@@ -224,6 +237,7 @@ namespace Lists
                 current = current.Next;
             }
             current.Next = current.Next.Next;
+            current.Next.Previus = current;
         }
         //RemoveFirstMultiple(int n) - удаление первых n элементов
         public void RemoveFirstMultiple(int n)
@@ -251,7 +265,6 @@ namespace Lists
         public void RemoveLastMultiple(int n)
         {
             int length = GetLength();
-            int length = GetLength();
             if (n > length || _head == null)
             {
                 throw new Exception();
@@ -268,6 +281,7 @@ namespace Lists
                 current = current.Next;
             }
             _tail = current;
+            current.Previus = _tail.Previus;
             current.Next = null;
         }
         //RemoveAtMultiple(int idx, int n) - удаление n элементов, начиная с указанного индекса
@@ -296,6 +310,7 @@ namespace Lists
             for (int i = 1; i <= n; i++)
             {
                 current.Next = current.Next.Next;
+                current.Next.Previus = current;
             }
 
         }
@@ -346,8 +361,8 @@ namespace Lists
             }
             int sum = 0;
             DoublyLinkedNode current = _head;
-            DoublyLinkedNode tmp = new Node(0);
-            tmp.Next = current;
+            DoublyLinkedNode tmp = current.Previus;
+            
 
             while (current != null)
             {
@@ -400,8 +415,7 @@ namespace Lists
         //если элементов с таким значением в списке нет)
         public int IndexOf(int val)
         {
-            int index = -1;
-          
+            int index = -1;          
             if (_head == null)
             {
                 return index;
@@ -409,11 +423,10 @@ namespace Lists
             if (_head.Value == val)
             {
                 return index = 0;
-            }
-            DoublyLinkedNode current = _head;
-
+            }            
             else
             {
+                DoublyLinkedNode current = _head;
                 int tmp = 0;
                 while (current.Next != null)
                 {
@@ -459,21 +472,8 @@ namespace Lists
                 current = current.Next;
             }
             return current.Value;
-        }
-        //Reverse() - изменение порядка элементов списка на обратный
-        public void Reverse()
-        {
-            DoublyLinkedNode current = _head;
-            while (current.Next != null)
-            {
+        }     
 
-                DoublyLinkedNode tmp = current.Next;
-                current.Next = tmp.Next;
-                tmp.Next = _head;
-                _head = tmp;
-            }
-            _tail = current;
-        }
         //Max() - поиск значения максимального элемента
         public int Max()
         {
@@ -571,6 +571,20 @@ namespace Lists
             }
             return tmp;
         }
+        public void Reverse()
+        {
+            DoublyLinkedNode current = _head;
+           DoublyLinkedNode tmp = null;           
+            while (current != null)
+            {
+                DoublyLinkedNode tmp2 = current.Next;
+                current.Next = tmp;
+                tmp = current;
+                current = tmp2;
+            }
+            _head.Next = _tail.Previus;
+            _head = _tail;
+        }
         public void SwapVariables(ref int numberA, ref int numberB)
         {
             int temp = numberA;
@@ -600,7 +614,6 @@ namespace Lists
             }
             _tail = current;
         }
-
 
         public void SortDesc()
         {
